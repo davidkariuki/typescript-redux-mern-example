@@ -1,7 +1,16 @@
 import React, { FC } from "react"
 import { Field, reduxForm, InjectedFormProps } from "redux-form"
+import { connect, ConnectedProps } from "react-redux"
 
-const StreamCreate: FC<InjectedFormProps> = ({ handleSubmit }) => {
+import { createStream } from "../../actions"
+//import { Stream } from "../../types"
+
+type InjectedProps = InjectedFormProps<{}, StreamCreateProps>
+
+const StreamCreate: FC<InjectedProps & StreamCreateProps> = ({
+  handleSubmit,
+  createStream,
+}) => {
   const renderError = ({
     error,
     touched,
@@ -31,7 +40,7 @@ const StreamCreate: FC<InjectedFormProps> = ({ handleSubmit }) => {
   }
 
   const onSubmit = (formValues: any) => {
-    console.log(formValues)
+    createStream(formValues)
   }
 
   return (
@@ -61,4 +70,16 @@ const validate = (formValues: any) => {
   return errors
 }
 
-export default reduxForm({ form: "streamCreate", validate })(StreamCreate)
+//const mapState = (state: PostsState): PostsState => {
+//return { posts: state.posts }
+//}
+
+const connector = connect(null, { createStream })
+type StreamCreateProps = ConnectedProps<typeof connector>
+
+const formWrapped = reduxForm<any, StreamCreateProps>({
+  form: "streamCreate",
+  validate,
+})(StreamCreate)
+
+export default connector(formWrapped)

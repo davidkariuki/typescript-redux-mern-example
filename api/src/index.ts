@@ -3,6 +3,7 @@ import createError from "http-errors"
 import dotenv from "dotenv"
 import mongoose from "mongoose"
 import colors from "colors"
+import cors from "cors"
 
 import { errorHandler } from "./errorHandler"
 import { homeRouter } from "./routes/home"
@@ -28,6 +29,7 @@ db.on(
 const app = express()
 const PORT = 8080
 
+app.use(cors())
 app.use(express.json())
 app.use("/", homeRouter)
 app.use("/streams", streamsRouter)
