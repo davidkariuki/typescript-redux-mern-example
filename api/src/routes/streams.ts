@@ -14,10 +14,8 @@ streamsRouter
     }
   })
   .post(async (req, res) => {
-    const stream = new Stream({
-      title: req.body.title,
-      description: req.body.description,
-    })
+    const { userId, title, description } = req.body
+    const stream = new Stream({ userId, title, description })
 
     try {
       const savedStream = await stream.save()
@@ -52,9 +50,11 @@ streamsRouter
   })
   .delete(async (req, res) => {
     try {
-      const stream = await Stream.deleteOne({ _id: req.params.id })
+      const id = req.params.id
 
-      res.send(stream)
+      await Stream.deleteOne({ _id: id })
+
+      res.send(id)
     } catch (error) {
       res.status(400).send(error)
     }

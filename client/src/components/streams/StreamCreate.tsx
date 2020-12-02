@@ -3,7 +3,6 @@ import { Field, reduxForm, InjectedFormProps } from "redux-form"
 import { connect, ConnectedProps } from "react-redux"
 
 import { createStream } from "../../actions"
-//import { Stream } from "../../types"
 
 type InjectedProps = InjectedFormProps<{}, StreamCreateProps>
 
@@ -69,10 +68,6 @@ const validate = (formValues: any) => {
 
   return errors
 }
-
-//const mapState = (state: PostsState): PostsState => {
-//return { posts: state.posts }
-//}
 
 const connector = connect(null, { createStream })
 type StreamCreateProps = ConnectedProps<typeof connector>

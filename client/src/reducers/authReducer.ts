@@ -1,8 +1,8 @@
 import { AuthState, AuthActions, SIGN_IN, SIGN_OUT } from "../types"
 
 const initialState: AuthState = {
-  isSignedIn: null,
-  userId: null,
+  isSignedIn: false,
+  userId: "",
 }
 
 const authReducer = (state = initialState, action: AuthActions): AuthState => {
@@ -10,7 +10,7 @@ const authReducer = (state = initialState, action: AuthActions): AuthState => {
     case SIGN_IN:
       return { ...state, isSignedIn: true, userId: action.payload }
     case SIGN_OUT:
-      return { ...state, isSignedIn: false, userId: null }
+      return { ...state, isSignedIn: false, userId: "" }
     default:
       return state
   }
