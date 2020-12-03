@@ -6,56 +6,52 @@ export const streamsRouter = express.Router()
 streamsRouter
   .route("/")
   .get(async (_req, res) => {
-    try {
-      const streams = await Stream.find({})
-      res.send(streams)
-    } catch (error) {
-      res.status(400).send(error)
-    }
+    Stream.find({}, (error, streams) => {
+      if (error) return res.status(error.status).send(error)
+
+      return res.send(streams)
+    })
   })
   .post(async (req, res) => {
     const { userId, title, description } = req.body
     const stream = new Stream({ userId, title, description })
 
-    try {
-      const savedStream = await stream.save()
-      res.send(savedStream)
-    } catch (error) {
-      res.status(400).send(error)
-    }
+    stream.save((error) => {
+      if (error) return res.status(error.status).send(error)
+
+      return res.status(201).send(stream)
+    })
   })
 
 streamsRouter
   .route("/:id")
   .get(async (req, res) => {
-    try {
-      const stream = await Stream.findById(req.params.id)
+    Stream.findById(req.params.id, (error, stream) => {
+      if (error) return res.status(500).send(error)
 
-      res.send(stream)
-    } catch (error) {
-      res.status(400).send(error)
-    }
+      return res.send(stream)
+    })
   })
-  .put(async (req, res) => {
-    try {
-      const stream = await Stream.updateOne(
-        { _id: req.params.id },
-        { title: req.body.title, description: req.body.description }
-      )
+  .patch(async (req, res) => {
+    const { title, description } = req.body
 
-      res.send(stream)
-    } catch (error) {
-      res.status(400).send(error)
-    }
+    Stream.findOneAndUpdate(
+      { _id: req.params.id },
+      { title, description },
+      { new: true },
+      (error, stream) => {
+        if (error) return res.status(500).send(error)
+
+        return res.send(stream)
+      }
+    )
   })
   .delete(async (req, res) => {
-    try {
-      const id = req.params.id
+    const id = req.params.id
 
-      await Stream.deleteOne({ _id: id })
+    Stream.findByIdAndDelete(id, (error, _stream) => {
+      if (error) return res.status(500).send(error)
 
-      res.send(id)
-    } catch (error) {
-      res.status(400).send(error)
-    }
+      return res.send(id)
+    })
   })
