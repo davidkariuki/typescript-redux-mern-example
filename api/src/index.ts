@@ -14,7 +14,7 @@ colors.enable()
 
 mongoose.connect(
   process.env.DB_URI!,
-  { useUnifiedTopology: true, useNewUrlParser: true },
+  { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false },
   () => {
     console.info("[DB]: 🥞 database connected".blue)
   }

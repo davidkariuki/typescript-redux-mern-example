@@ -26,8 +26,8 @@ streamsRouter
 streamsRouter
   .route("/:id")
   .get(async (req, res) => {
-    Stream.findById(req.params.id, (error, stream) => {
-      if (error) return res.status(500).send(error)
+    Stream.findOne({ _id: req.params.id }, (error, stream) => {
+      if (error) return res.status(error.status).send(error)
 
       return res.send(stream)
     })
@@ -40,7 +40,7 @@ streamsRouter
       { title, description },
       { new: true },
       (error, stream) => {
-        if (error) return res.status(500).send(error)
+        if (error) return res.status(error.status).send(error)
 
         return res.send(stream)
       }
@@ -49,8 +49,8 @@ streamsRouter
   .delete(async (req, res) => {
     const id = req.params.id
 
-    Stream.findByIdAndDelete(id, (error, _stream) => {
-      if (error) return res.status(500).send(error)
+    Stream.deleteOne({ _id: id }, (error) => {
+      if (error) return res.status(error.status).send(error)
 
       return res.send(id)
     })
