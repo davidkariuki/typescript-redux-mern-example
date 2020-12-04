@@ -52,6 +52,6 @@ streamsRouter
     Stream.deleteOne({ _id: id }, (error) => {
       if (error) return res.status(error.status).send(error)
 
-      return res.send(id)
+      return res.send({})
     })
   })
